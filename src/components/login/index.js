@@ -26,12 +26,15 @@ const Login = () => {
   const [winner, setwinner] = useState("");
   let vata = [];
   let newScore = 0;
-  const ENDPOINT = "http://localhost:5000";
+  const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
+  // const ENDPOINT = "http://localhost:5000";
   socket = io(ENDPOINT);
   useEffect(() => {
     let lasttime = Date.now();
     // console.log(lasttime);
     // if (lasttime - Date.now() > 1000) {
+    console.log("oponent", oponent);
+    // if (oponent === "") {
     socket.on("get user", function (data) {
       console.log("connect to socket.io");
       console.log(data);
@@ -47,7 +50,7 @@ const Login = () => {
               name: user,
               score: 0,
             };
-            setPlayer(playerData);
+            setPlayer(user);
             setLoading(true);
           } else if (i === 1) {
             const oponentData = {
@@ -55,23 +58,26 @@ const Login = () => {
               score: 0,
             };
             setLoading(true);
-            setOponent(oponentData);
+            setOponent(user);
           } else {
             // alert("Server Penuh");
             console.log("server penuh");
           }
         });
       }
+      console.log(loading);
     });
+    // }
+    //
     socket.on("disconnected", function (name) {
       console.log(`${name} keluar dari permainan, permainan selesai`);
       return <Redirect to="/" />;
       // alert(`${name} keluar dari permainan, permainan selesai`);
     });
-    socket.on("connected", function (username) {
-      setInfo(username + " joined the room.");
-      console.log(info);
-    });
+    // socket.on("connected", function (username) {
+    //   setInfo(username + " joined the room.");
+    //   console.log(info);
+    // });
     if (player !== "" && oponent !== "") {
       // console.log("tes");
       setLogin(false);
@@ -79,7 +85,7 @@ const Login = () => {
       setGame(true);
     }
     // }
-  }, [ENDPOINT, game, oponent]);
+  }, [ENDPOINT, game, oponent, loading]);
 
   useEffect(() => {
     socket.on("game start", function () {
