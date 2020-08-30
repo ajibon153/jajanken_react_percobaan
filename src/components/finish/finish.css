@@ -1,0 +1,59 @@
+.selesai {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: black;
+  font-size: 20px;
+  text-align: center;
+  position: absolute;
+  height: 113%;
+  width: 100%;
+  top: 0;
+  margin-top: 0;
+  justify-content: center;
+  align-items: center;
+  display: table;
+}
+
+.selesai > h1 {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 100%;
+}
+.container-popup {
+  display: table-cell;
+  vertical-align: middle;
+}
+.box {
+  text-align: center;
+  width: 558px;
+  height: 300px;
+  margin: 0 30%;
+  background-color: white;
+  display: table;
+  border-radius: 20px;
+}
+.content {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.buttonFn {
+  color: #fff !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #2979ff;
+  padding: 20px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  width: 200px;
+  margin: 20px;
+  cursor: pointer;
+}
+.logout {
+  background: orange;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}

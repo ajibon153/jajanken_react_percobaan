@@ -1,0 +1,22 @@
+#next {
+  margin: 10px auto;
+  border: 2px solid white;
+  border-radius: 20px;
+  text-align: center;
+  width: 300px;
+  color: white;
+  font-size: 15px;
+  padding: 10px;
+  font-family: Audiowide, sans-serif;
+  position: relative;
+  margin-top: 0;
+  cursor: pointer;
+}
+#next > h1 {
+  color: white;
+  text-align: center;
+  font-family: Luckiest Guy, sans-serif;
+}
+.choices {
+  margin-top: -20px;
+}
