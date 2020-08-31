@@ -24,8 +24,8 @@ const Game = ({ location, reload }) => {
   const [finish, setFinish] = useState(false);
   const [submitCard, setSubmitCard] = useState(false);
   const [winner, setwinner] = useState("");
-  // const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
-  const ENDPOINT = "http://localhost:5000";
+  const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
+  // const ENDPOINT = "http://localhost:5000";
 
   socket = io(ENDPOINT, { transports: ["websocket", "polling"] });
   useEffect(() => {
