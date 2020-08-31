@@ -10,6 +10,8 @@ import Finish from "../finish/finish";
 import Loading from "../finish/loading";
 import "./game.css";
 
+import LoadingGif from "../../assets/loading5.gif";
+
 let socket;
 
 const Game = ({ location, reload }) => {
@@ -23,11 +25,13 @@ const Game = ({ location, reload }) => {
   const [next, setNext] = useState(false);
   const [finish, setFinish] = useState(false);
   const [submitCard, setSubmitCard] = useState(false);
+  const [calculating, setcalculating] = useState(false);
   const [winner, setwinner] = useState("");
+
   // const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
   const ENDPOINT = "http://localhost:5000";
 
-  socket = io(ENDPOINT, { transports: ["websocket", "polling"] });
+  socket = io.connect(ENDPOINT, { transports: ["websocket", "polling"] });
   useEffect(() => {
     window.onbeforeunload = confirmExit();
     function confirmExit() {
@@ -48,7 +52,6 @@ const Game = ({ location, reload }) => {
     socket.emit("send message", payload, function (data) {
       console.log("user baru telah di tambahkan");
       const { name, player, score, error } = data;
-      console.log("new user", data);
       if (player == "one") {
         setPlayer(data);
       }
@@ -68,17 +71,16 @@ const Game = ({ location, reload }) => {
     }
   }, []);
 
-  // socket.on("disconnected", function (name) {
-  //   let user = checkPosition();
-  //   console.log(`Player ${user} keluar dari permainan, permainan selesai`);
-  //   // return <Redirect to="/" />;
-  //   // alert(`${user} keluar dari permainan, permainan selesai`);
-  //   window.location = "/";
-  // });
+  socket.on("disconnected", function (name) {
+    let user = checkPosition();
+    console.log(`Player ${user} keluar dari permainan, permainan selesai`);
+    // return <Redirect to="/" />;
+    // alert(`${user} keluar dari permainan, permainan selesai`);
+    window.location = "/";
+  });
 
   socket.on("get user", function (data) {
     console.log("connect to socket.io");
-    console.log(data);
     data.map((user, i) => {
       if (i == 0) {
         const playerData = {
@@ -111,7 +113,6 @@ const Game = ({ location, reload }) => {
       setTimeout(function () {
         setInfo("Hasil Seri");
       }, 5000);
-      console.log(info);
 
       setSubmitCard(false);
     });
@@ -125,7 +126,6 @@ const Game = ({ location, reload }) => {
     });
 
     function countdown(choices, a) {
-      console.log("choices", choices);
       setTimeout(function () {
         setInfo("3...");
       }, 0);
@@ -157,6 +157,7 @@ const Game = ({ location, reload }) => {
         }
         setSubmitCard(false);
         setNext(true);
+        setcalculating(false);
       }, 5000);
 
       if (scorePlayer >= 2 || scoreOponent >= 3) {
@@ -167,9 +168,6 @@ const Game = ({ location, reload }) => {
         }
         setFinish(true);
       }
-
-      console.log("game score pl", scorePlayer);
-      console.log("game score op", scoreOponent);
     }
   }, [submitCard]);
 
@@ -182,13 +180,12 @@ const Game = ({ location, reload }) => {
     } else {
       console.log("musuh telah meninggalkan lapangan permainan");
     }
-    console.log("positionCHoi", positionChoice);
     return positionChoice;
   }
 
   // useEffect(()=>)
   function submitChoice(choice) {
-    console.log("klik");
+    console.log("submit pilihan ke server heroku....");
     if (!submitCard) {
       console.log(submitCard);
       setInfo(`${name} memilih ${choice}`);
@@ -198,14 +195,13 @@ const Game = ({ location, reload }) => {
         player: checkPosition(),
         choice,
       };
-
+      setcalculating(true);
       socket.emit("send message", payload, function (data) {
         const hasil = data;
         console.log("hasil janken", hasil);
       });
       setSubmitCard(true);
     } else {
-      console.log("kamu sudah memilih");
       setInfo("kamu sudah memilih");
     }
   }
@@ -218,6 +214,14 @@ const Game = ({ location, reload }) => {
       <div className="outerContainer">
         {/* {player && oponent ? <Loading /> : ""} */}
         <div className="result">
+          {calculating ? (
+            <div style={{ position: "absolute" }}>
+              {" "}
+              <img src={LoadingGif} /> <h7>kalkulasi hasil di server</h7>{" "}
+            </div>
+          ) : (
+            ""
+          )}
           {/* <div className="listPlayer">
               <h4>Online User</h4>
               <ul className="list-group" id="users">
