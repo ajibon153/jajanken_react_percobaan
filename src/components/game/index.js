@@ -10,8 +10,6 @@ import Finish from "../finish/finish";
 import Loading from "../finish/loading";
 import "./game.css";
 
-import LoadingGif from "../../assets/loading5.gif";
-
 let socket;
 
 const Game = ({ location, reload }) => {
@@ -23,10 +21,11 @@ const Game = ({ location, reload }) => {
   const [scoreOponent, setScoreOponent] = useState(0);
   const [info, setInfo] = useState("");
   const [next, setNext] = useState(false);
+  const [getData, setgetData] = useState(false);
   const [finish, setFinish] = useState(false);
   const [submitCard, setSubmitCard] = useState(false);
   const [calculating, setcalculating] = useState(false);
-  const [winner, setwinner] = useState("");
+  const [winner, setWinner] = useState("");
 
   // const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
   const ENDPOINT = "http://localhost:5000";
@@ -126,6 +125,7 @@ const Game = ({ location, reload }) => {
     });
 
     function countdown(choices, a) {
+      setcalculating(false);
       setTimeout(function () {
         setInfo("3...");
       }, 0);
@@ -149,25 +149,31 @@ const Game = ({ location, reload }) => {
         if (a == 1) {
           setScorePlayer(scorePlayer + 1);
           setInfo(choices[0][0]["name"] + " menang!");
+          setWinner(player.name);
           console.log(choices[0][0]["name"] + " menang!");
         } else {
           setScoreOponent(scoreOponent + 1);
           setInfo(choices[0][1]["name"] + " menang!");
+          setWinner(oponent.name);
           console.log(choices[0][1]["name"] + " menang!");
         }
+
+        setTimeout(function () {
+          if (scorePlayer >= 2 || scoreOponent >= 2) {
+            if (scorePlayer > 3) {
+              setWinner(player.name);
+            } else if (scoreOponent > 3) {
+              console.log("winner 2,oponent.name");
+              setWinner(oponent.name);
+            }
+            setFinish(true);
+          }
+        }, 1000);
+
+        setgetData(false);
         setSubmitCard(false);
         setNext(true);
-        setcalculating(false);
       }, 5000);
-
-      if (scorePlayer >= 2 || scoreOponent >= 3) {
-        if (scorePlayer == 3) {
-          setwinner(player.name);
-        } else if (scoreOponent == 3) {
-          setwinner(oponent.name);
-        }
-        setFinish(true);
-      }
     }
   }, [submitCard]);
 
@@ -185,6 +191,7 @@ const Game = ({ location, reload }) => {
 
   // useEffect(()=>)
   function submitChoice(choice) {
+    setNext(false);
     console.log("submit pilihan ke server heroku....");
     if (!submitCard) {
       console.log(submitCard);
@@ -199,7 +206,18 @@ const Game = ({ location, reload }) => {
       socket.emit("send message", payload, function (data) {
         const hasil = data;
         console.log("hasil janken", hasil);
+        setgetData(true);
       });
+      setTimeout(() => {
+        if (!getData) {
+          console.log("resend choice respon");
+          socket.emit("send message", payload, function (data) {
+            const hasil = data;
+            console.log("hasil janken", hasil);
+            setgetData(true);
+          });
+        }
+      }, 10000);
       setSubmitCard(true);
     } else {
       setInfo("kamu sudah memilih");
@@ -214,14 +232,14 @@ const Game = ({ location, reload }) => {
       <div className="outerContainer">
         {/* {player && oponent ? <Loading /> : ""} */}
         <div className="result">
-          {calculating ? (
+          {/* {calculating ? (
             <div style={{ position: "absolute" }}>
               {" "}
-              <img src={LoadingGif} /> <h7>kalkulasi hasil di server</h7>{" "}
+              <img src={LoadingGif} /> <h5>kalkulasi hasil di server</h5>{" "}
             </div>
           ) : (
             ""
-          )}
+          )} */}
           {/* <div className="listPlayer">
               <h4>Online User</h4>
               <ul className="list-group" id="users">
@@ -240,8 +258,11 @@ const Game = ({ location, reload }) => {
             info={info}
             next={next}
             funcSetNext={funcSetNext}
+            calculating={calculating}
           />
         </div>
+        <br />
+        <br />
         <Card
           setInfo={setInfo}
           submitCard={submitCard}

@@ -97,13 +97,23 @@ header > h1 {
 #user-level {
   position: absolute;
   top: 25px;
-  left: -100px;
+  left: 0;
+  min-width: 200px;
+  /* width: 200px; */
+  max-width: 500px;
+  text-align: left;
+  padding: 10px;
 }
 
 #computer-level {
   position: absolute;
   top: 25px;
-  right: -120px;
+  right: 0;
+  min-width: 200px;
+  /* width: 200px; */
+  max-width: 500px;
+  text-align: right;
+  padding: 10px;
 }
 
 .result {
@@ -169,7 +179,14 @@ header > h1 {
   border: 8px solid #ffff00;
   background-color: #ffff00;
 }
-
+.calculating {
+  position: absolute;
+  text-align: center;
+  width: 550%;
+  left: -220%;
+  height: 600px;
+  z-index: 99;
+}
 #action-message {
   color: white;
   padding-top: 50px;

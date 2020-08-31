@@ -1,4 +1,5 @@
 import React from "react";
+import LoadingGif from "../../assets/loading5.gif";
 
 const Score = ({
   next,
@@ -8,6 +9,7 @@ const Score = ({
   info,
   scorePlayer,
   scoreOponent,
+  calculating,
 }) => {
   // console.log("score pl", scorePlayer);
   // console.log("score op", scoreOponent);
@@ -24,13 +26,13 @@ const Score = ({
       {/* ) : (
         <h4 style={{ textAlign: "center" }}>Tentukan Pilihanmu</h4>
       )} */}
+      <div id="user-level" className="badge">
+        {player.name}
+      </div>
+      <div id="computer-level" className="badge">
+        {oponent.name}
+      </div>
       <div className="score-board">
-        <div id="user-level" className="badge">
-          {player.name}
-        </div>
-        <div id="computer-level" className="badge">
-          {oponent.name}
-        </div>
         <span id="user-score">{scorePlayer}</span>:
         <span id="computer-score">{scoreOponent}</span>
         {next ? (
@@ -42,6 +44,14 @@ const Score = ({
             }}
           >
             <h1>Next Round </h1>
+          </div>
+        ) : (
+          ""
+        )}
+        {calculating ? (
+          <div className="calculating" style={{ position: "absolute" }}>
+            {" "}
+            <img src={LoadingGif} />
           </div>
         ) : (
           ""
