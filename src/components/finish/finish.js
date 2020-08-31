@@ -1,7 +1,7 @@
 import React from "react";
-import { Link, BrowserRouter as Router, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./finish.css";
-const Finish = ({ hasil, name, room }) => {
+const Finish = ({ winner }) => {
   //   let reloadRoute = () => {
   //     router.push({ pathname: "/empty" });
   //     router.replace({ pathname: "/route-to-refresh" });
@@ -14,7 +14,7 @@ const Finish = ({ hasil, name, room }) => {
             <div className="title">
               <h1>Permainan selesa selesai</h1>
             </div>
-            <div className="body">Kamu telah {hasil}</div>
+            <div className="body">Pemenangnya adalah {winner}</div>
             <div className="footer">
               {/* <Redirect
                 // onClick={this.reloadRoute()}

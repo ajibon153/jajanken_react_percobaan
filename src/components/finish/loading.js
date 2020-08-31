@@ -1,13 +1,13 @@
 import React from "react";
-import { Link, BrowserRouter as Router, Redirect } from "react-router-dom";
+// import { Link, BrowserRouter as Router, Redirect } from "react-router-dom";
 import "./finish.css";
-const Loading = ({ hasil, name, room }) => {
+const Loading = () => {
   //   let reloadRoute = () => {
   //     router.push({ pathname: "/empty" });
   //     router.replace({ pathname: "/route-to-refresh" });
   //   };
   return (
-    <div className="selesai" style={{ background: "unset" }}>
+    <div className="selesai">
       <h1 style={{ color: "white", marginTop: "-60px" }}>
         Menunggu Pemain lain...
       </h1>

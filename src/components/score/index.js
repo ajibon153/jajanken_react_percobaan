@@ -1,12 +1,21 @@
 import React from "react";
 
-const Score = ({ next, player, oponent, info, scorePlayer, scoreOponent }) => {
+const Score = ({
+  next,
+  funcSetNext,
+  player,
+  oponent,
+  info,
+  scorePlayer,
+  scoreOponent,
+}) => {
   // console.log("score pl", scorePlayer);
   // console.log("score op", scoreOponent);
   const nextR = {
-    position: "absolute",
-    bottom: "-170px",
-    left: "-0px",
+    position: " absolute",
+    bottom: "-55px",
+    left: " 0px",
+    background: " orange",
   };
   return (
     <>
@@ -28,9 +37,9 @@ const Score = ({ next, player, oponent, info, scorePlayer, scoreOponent }) => {
           <div
             id="next"
             style={nextR}
-            // onClick={() => {
-            //   nextRound();
-            // }}
+            onClick={() => {
+              funcSetNext();
+            }}
           >
             <h1>Next Round </h1>
           </div>
