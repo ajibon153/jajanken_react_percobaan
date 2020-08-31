@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import queryString from "query-string";
 import io from "socket.io-client";
 
-import { Redirect } from "react-router-dom";
+// import { Redirect } from "react-router-dom";
 
 import Card from "../card";
 import Score from "../score";
@@ -24,8 +24,8 @@ const Game = ({ location, reload }) => {
   const [finish, setFinish] = useState(false);
   const [submitCard, setSubmitCard] = useState(false);
   const [winner, setwinner] = useState("");
-  const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
-  // const ENDPOINT = "http://localhost:5000";
+  // const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
+  const ENDPOINT = "http://localhost:5000";
 
   socket = io(ENDPOINT, { transports: ["websocket", "polling"] });
   useEffect(() => {
@@ -66,7 +66,7 @@ const Game = ({ location, reload }) => {
     ) {
       window.location.href = "/";
     }
-  }, [reload]);
+  }, []);
 
   // socket.on("disconnected", function (name) {
   //   let user = checkPosition();
@@ -78,7 +78,7 @@ const Game = ({ location, reload }) => {
 
   socket.on("get user", function (data) {
     console.log("connect to socket.io");
-
+    console.log(data);
     data.map((user, i) => {
       if (i == 0) {
         const playerData = {
@@ -96,10 +96,11 @@ const Game = ({ location, reload }) => {
         };
         setOponent(oponentData);
         setLoading(false);
-      } else {
-        alert("Server Penuh");
-        console.log("server penuh");
       }
+      // else {
+      //   alert("Server Penuh");
+      //   console.log("server penuh");
+      // }
     });
   });
 
@@ -145,7 +146,7 @@ const Game = ({ location, reload }) => {
         );
       }, 4000);
       setTimeout(function () {
-        if (a === 1) {
+        if (a == 1) {
           setScorePlayer(scorePlayer + 1);
           setInfo(choices[0][0]["name"] + " menang!");
           console.log(choices[0][0]["name"] + " menang!");

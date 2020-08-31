@@ -12,7 +12,7 @@ const Login = () => {
   const [game, setGame] = useState(false);
   const [alert, setAlert] = useState(false);
   const [reload, setreload] = useState(false);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
 
   function popUp(e) {
     e.preventDefault();
@@ -36,7 +36,7 @@ const Login = () => {
         <Redirect to="/game" user={vata} />
       ) : ( */}
       <div className="joinOuterContainer" id="userFormArea">
-        {loading ? (
+        {/* {loading ? (
           <h1
             style={{
               position: "absolute",
@@ -49,7 +49,7 @@ const Login = () => {
           </h1>
         ) : (
           ""
-        )}
+        )} */}
 
         <form id="userForm">
           <div className="joinInnerContainer">

@@ -10,7 +10,7 @@ import "./card.css";
 
 // let socket;
 
-const Card = ({ setInfo, submitChoice, submitCard }) => {
+const Card = ({ submitChoice }) => {
   // const [compName, setCompName] = useState("");
   // const [hasil, setHasil] = useState("");
   // const [scorePlayer, setScorePlayer] = useState(0);
@@ -32,7 +32,7 @@ const Card = ({ setInfo, submitChoice, submitCard }) => {
   // let isSentByCurrentUser = false;
 
   // const trimedName = name.trim().toLowerCase();
-  // if (user === trimedName) {
+  // if (user == trimedName) {
   //   isSentByCurrentUser = true;
   // }
 
@@ -52,7 +52,7 @@ const Card = ({ setInfo, submitChoice, submitCard }) => {
   //       const pilihanPlayer = pil.className;
   //       setPlayerCard(pilihanPlayer);
   //       let pilihanComputer;
-  //       if (musuhCard === "") {
+  //       if (musuhCard == "") {
   //         pilihanComputer = getRandomChoice;
   //         setMusuhCard(pilihanComputer);
   //       }
