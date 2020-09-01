@@ -8,6 +8,7 @@ import Card from "../card";
 import Score from "../score";
 import Finish from "../finish/finish";
 import Loading from "../finish/loading";
+import Logout from "../finish/logout";
 import "./game.css";
 
 let socket;
@@ -22,15 +23,21 @@ const Game = ({ location, reload }) => {
   const [info, setInfo] = useState("");
   const [next, setNext] = useState(false);
   const [getData, setgetData] = useState(false);
+  const [logout, setLogout] = useState(false);
   const [finish, setFinish] = useState(false);
   const [submitCard, setSubmitCard] = useState(false);
   const [calculating, setcalculating] = useState(false);
   const [winner, setWinner] = useState("");
+  let positionChoice;
 
   // const ENDPOINT = "https://jajanken-version1.herokuapp.com/";
   const ENDPOINT = "http://localhost:5000";
 
-  socket = io.connect(ENDPOINT, { transports: ["websocket", "polling"] });
+  socket = io.connect(ENDPOINT, {
+    allowUpgrades: true,
+    transports: ["websocket", "polling"],
+    // enabledTransports: ["websocket"],
+  });
   useEffect(() => {
     window.onbeforeunload = confirmExit();
     function confirmExit() {
@@ -70,12 +77,15 @@ const Game = ({ location, reload }) => {
     }
   }, []);
 
-  socket.on("disconnected", function (name) {
+  socket.on("disconnected", function () {
     let user = checkPosition();
+    // setName(name);
     console.log(`Player ${user} keluar dari permainan, permainan selesai`);
     // return <Redirect to="/" />;
     // alert(`${user} keluar dari permainan, permainan selesai`);
     window.location = "/";
+    setLoading(false);
+    setLogout(true);
   });
 
   socket.on("get user", function (data) {
@@ -149,25 +159,18 @@ const Game = ({ location, reload }) => {
         if (a == 1) {
           setScorePlayer(scorePlayer + 1);
           setInfo(choices[0][0]["name"] + " menang!");
-          setWinner(player.name);
+          // setWinner(player.name);
           console.log(choices[0][0]["name"] + " menang!");
         } else {
           setScoreOponent(scoreOponent + 1);
           setInfo(choices[0][1]["name"] + " menang!");
-          setWinner(oponent.name);
+          // setWinner(oponent.name);
           console.log(choices[0][1]["name"] + " menang!");
         }
 
         setTimeout(function () {
-          if (scorePlayer >= 2 || scoreOponent >= 2) {
-            if (scorePlayer > 3) {
-              setWinner(player.name);
-            } else if (scoreOponent > 3) {
-              console.log("winner 2,oponent.name");
-              setWinner(oponent.name);
-            }
-            setFinish(true);
-          }
+          const sethewinner = checkPosition();
+          console.log("cek winner ", sethewinner);
         }, 1000);
 
         setgetData(false);
@@ -175,27 +178,44 @@ const Game = ({ location, reload }) => {
         setNext(true);
       }, 5000);
     }
-  }, [submitCard]);
+  }, [submitCard, winner]);
 
   function checkPosition() {
-    let positionChoice;
+    if (scorePlayer >= 2 || scoreOponent >= 2) {
+      if (scorePlayer > 3) {
+        setWinner(player.name);
+      } else if (scoreOponent > 3) {
+        console.log("winner 2,oponent.name");
+        setWinner(oponent.name);
+      }
+      setFinish(true);
+    }
+  }
+  function checkPosition() {
+    console.log("name musu", name);
+    console.log("name player", player.name);
+    console.log("name oponent", oponent.name);
     if (name == player.name) {
       positionChoice = player.player;
+      return positionChoice;
     } else if (name == oponent.name) {
       positionChoice = oponent.player;
+      return positionChoice;
     } else {
-      console.log("musuh telah meninggalkan lapangan permainan");
+      console.log("recheck");
+      checkPosition();
+      // console.log("musuh telah meninggalkan lapangan permainan");
     }
-    return positionChoice;
   }
 
   // useEffect(()=>)
   function submitChoice(choice) {
     setNext(false);
-    console.log("submit pilihan ke server heroku....");
+    console.log("submit pilihan ke server ....");
     if (!submitCard) {
       console.log(submitCard);
       setInfo(`${name} memilih ${choice}`);
+      console.log("payload");
       let payload = {
         method: "player choice",
         name,
@@ -207,17 +227,18 @@ const Game = ({ location, reload }) => {
         const hasil = data;
         console.log("hasil janken", hasil);
         setgetData(true);
+        payload = "";
       });
-      setTimeout(() => {
-        if (!getData) {
-          console.log("resend choice respon");
-          socket.emit("send message", payload, function (data) {
-            const hasil = data;
-            console.log("hasil janken", hasil);
-            setgetData(true);
-          });
-        }
-      }, 10000);
+      // setTimeout(() => {
+      //   if (!getData) {
+      //     console.log("resend choice respon");
+      //     socket.emit("send message", payload, function (data) {
+      //       const hasil = data;
+      //       console.log("hasil janken", hasil);
+      //       setgetData(true);
+      //     });
+      //   }
+      // }, 10000);
       setSubmitCard(true);
     } else {
       setInfo("kamu sudah memilih");
@@ -271,6 +292,7 @@ const Game = ({ location, reload }) => {
       </div>
       {finish ? <Finish winner={winner} /> : ""}
       {loading ? <Loading /> : ""}
+      {logout ? <Logout name={name} /> : ""}
     </div>
   );
 };
